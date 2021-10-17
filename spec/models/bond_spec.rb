@@ -23,10 +23,8 @@ require 'rails_helper'
 RSpec.describe Bond, type: :model do
   describe "#valid?" do
     it "should validate the state correctly" do
-      friend = User.new
-      friend.save
-      user = User.new
-      user.save
+      friend = build(:user)
+      user = build(:user)
       bond = Bond.new(user: user,
                       friend: friend)
       
@@ -42,13 +40,9 @@ RSpec.describe Bond, type: :model do
   describe "#save" do
     context "when complete data is given" do
       it "can be persisted" do
-        user = User.create email: "e1@example.org",
-                           first_name: "Edwin",
-                           username: "e1"
+        user = create(:user)
         
-        friend = User.create email: "a1@example.org",
-                             first_name: "Adam",
-                             username: "a1"
+        friend = create(:user)
         
         bond = Bond.new(
           user: user,
