@@ -20,8 +20,8 @@
 #
 FactoryBot.define do
   factory :bond do
-    user_id { "" }
-    friend_id { "" }
+    user_id { 1 }
+    friend_id { 1 }
     state { "MyString" }
   end
 end
