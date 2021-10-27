@@ -1,4 +1,3 @@
-require 'factory_bot'
 # RSpec
 # spec/support/factory_bot.rb
 RSpec.configure do |config|
