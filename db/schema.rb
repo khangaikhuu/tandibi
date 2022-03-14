@@ -32,3 +32,58 @@ ActiveRecord::Schema.define(version: 2021_10_05_150049) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "places", force: :cascade do |t|
+    t.string "locale", null: false
+    t.geography "coordinate", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.string "name", null: false
+    t.string "place_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["coordinate"], name: "index_places_on_coordinate", using: :gist
+    t.index ["locale", "coordinate"], name: "index_places_on_locale_and_coordinate", unique: true
+    t.index ["locale"], name: "index_places_on_locale"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "thread_id"
+    t.string "postable_type", null: false
+    t.bigint "postable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
+  end
+
+  create_table "sights", force: :cascade do |t|
+    t.bigint "place_id", null: false
+    t.string "activity_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["place_id"], name: "index_sights_on_place_id"
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.string "text", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.boolean "is_public"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  add_foreign_key "bonds", "users"
+  add_foreign_key "bonds", "users", column: "friend_id"
+  add_foreign_key "pictures", "posts"
+  add_foreign_key "posts", "posts", column: "thread_id"
+  add_foreign_key "posts", "users"
+  add_foreign_key "sights", "places"
+end
